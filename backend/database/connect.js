@@ -49,7 +49,7 @@ async function initializeDatabase() {
         const rawData = fs.readFileSync('database/database.json', 'utf8'); // Lire le fichier en mode texte
         const data = JSON.parse(rawData); // Convertir le JSON en objet JavaScript
 
-        // await pool.execute(data.deleteAllTables);
+        await pool.execute(data.deleteAllTables);
 
         // Exécuter les requêtes SQL
         await pool.execute(data.createCompteTable);

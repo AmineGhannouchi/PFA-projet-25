@@ -33,9 +33,9 @@ async function checkIfExists(email, numero_tel) {
 // Fonction pour créer un compte Admin
 createAdmin = async (req, res) => {
     try {
-        const { nom, prenom, date_de_naissance, tel, email , password , adresse} = req.body;
+        const { nom, prenom, tel, email , password} = req.body;
 
-        if (!nom || !prenom || !date_de_naissance || !tel || !email||!password) {
+        if (!nom || !prenom || !tel || !email||!password) {
             return res.status(400).json({ error: 'Tous les champs sont requis.' });
         }
 
@@ -48,18 +48,18 @@ createAdmin = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         //insert data
         const [result] = await pool.execute(
-            'INSERT INTO Compte (nom, prenom, date_de_naissance, numero_tel, adresse_email, mot_de_passe) VALUES (?, ?, ?, ?, ?, ?)',
-            [nom, prenom,formatDateForMySQL(date_de_naissance), tel, email,hashedPassword]
+            'INSERT INTO Compte (nom, prenom, numero_tel, adresse_email, mot_de_passe) VALUES (?, ?, ?, ?, ?)',
+            [nom, prenom, tel, email,hashedPassword]
         );
         
         const insertId = result.insertId; //a ne pas supprimer
 
         const [result2] = await pool.execute(
-            'INSERT INTO Compte_Admin (id_compte, adresse) VALUES (?, ?)',
-            [insertId, adresse]
+            'INSERT INTO Compte_Admin (id_compte) VALUES (?)',
+            [insertId]
         );
 
-        const compte = { id_compte: result.id_compte, nom, prenom, date_de_naissance, tel, email, adresse:result2.adresse};
+        const compte = { id_compte: result.id_compte, nom, prenom, tel, email};
         return res.status(201).json({compte});
     } catch (error) {
         console.error(error);
@@ -70,9 +70,9 @@ createAdmin = async (req, res) => {
 // Fonction pour créer un compte client
 createClient =  async (req, res) => {
     try {
-        const { nom, prenom, date_de_naissance, tel, email , password} = req.body;
+        const { nom, prenom, tel, email , password} = req.body;
 
-        if (!nom || !prenom || !date_de_naissance || !tel || !email||!password) {
+        if (!nom || !prenom || !tel || !email||!password) {
             return res.status(400).json({ error: 'Tous les champs sont requis.' });
         }
 
@@ -85,8 +85,8 @@ createClient =  async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         //insert data
         const [result] = await pool.execute(
-            'INSERT INTO Compte (nom, prenom, date_de_naissance, numero_tel, adresse_email, mot_de_passe) VALUES (?, ?, ?, ?, ?, ?)',
-            [nom, prenom,formatDateForMySQL(date_de_naissance), tel, email,hashedPassword]
+            'INSERT INTO Compte (nom, prenom, numero_tel, adresse_email, mot_de_passe) VALUES (?, ?, ?, ?, ?)',
+            [nom, prenom, tel, email,hashedPassword]
         );
 
         const insertId = result.insertId; //a ne pas supprimer
@@ -96,7 +96,7 @@ createClient =  async (req, res) => {
             [insertId]
         );
 
-        const compte = { id_compte: result.id_compte, nom, prenom, date_de_naissance, tel, email };
+        const compte = { id_compte: result.id_compte, nom, prenom, tel, email };
         return res.status(201).json({compte});
     } catch (error) {
         console.error(error);
