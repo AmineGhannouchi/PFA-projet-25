@@ -32,6 +32,7 @@ app.use('/api/register', require('./routes/register'));
 app.use('/api/Login', require('./routes/auth'));//authentification
 app.use('/api/refresh', require('./routes/refresh'));
 app.use('/api/logout', require('./routes/logout'));
+app.use('/api/plants', require('./routes/plants'));
 
 app.use(verifyJWT);
 

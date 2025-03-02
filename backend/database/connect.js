@@ -49,13 +49,24 @@ async function initializeDatabase() {
         const rawData = fs.readFileSync('database/database.json', 'utf8'); // Lire le fichier en mode texte
         const data = JSON.parse(rawData); // Convertir le JSON en objet JavaScript
 
-        await pool.execute(data.deleteAllTables);
+        //delete all tables
+        // await pool.execute(data.deleteUserTables);
+        // await pool.execute(data.deletePlantTable);
+        //add admin user
+        // const [result] = await pool.execute("INSERT INTO Compte (adresse_email, mot_de_passe, role, numero_tel, nom, prenom) VALUES ('admin', 'admin', 'admin', 'admin', 'admin', 'admin');");
+        // await pool.execute("INSERT INTO Compte_Admin (id_compte) VALUES (?);", [result.insertId]);
 
         // Exécuter les requêtes SQL
         await pool.execute(data.createCompteTable);
         await pool.execute(data.createAdminTable);
         await pool.execute(data.createClientTable);
         await pool.execute(data.createRefreshTokensTable);
+
+        await pool.execute(data.createPlantTable);
+        await pool.execute(data.createSensorTypeTable);
+        await pool.execute(data.createPinTable);
+        await pool.execute(data.createPinPlantTable);
+        await pool.execute(data.createValueTable);
 
 
         // await displayTables(pool);//afficher la base de donner
