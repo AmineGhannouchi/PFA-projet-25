@@ -66,6 +66,8 @@ async function initializeDatabase() {
         await pool.execute(data.createPinPlantTable);
         await pool.execute(data.createValueTable);
 
+        // await pool.execute(data.createSettingsTable);//mode (auto,manu),reservoirMin,reservoir
+
         //add admin user
 
         // password = await bcrypt.hash("admin", 10);

@@ -1,7 +1,7 @@
 const {pool} = require('../database/connect');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-
+bcrypt = require('bcrypt');
 
 const getAllUsers = async (req, res) => {
     try {
@@ -21,12 +21,13 @@ const updateUsers = async (req, res) => {
         //recupere nom prenom date de naissance tel email
         const nom = req.body.nom || user[0].nom;
         const prenom = req.body.prenom || user[0].prenom;
-        const date_de_naissance = req.body.date_de_naissance || user[0].date_de_naissance;
         const numero_tel = req.body.numero_tel || user[0].numero_tel;
         const adresse_email = req.body.adresse_email || user[0].adresse_email;
+        const password = req.body.password || user[0].password;
+        const cPassword = await bcrypt.hash(password, 10);
 
         //mise a jour
-        pool.execute('UPDATE Compte SET nom = ?, prenom = ?, date_de_naissance = ?, numero_tel = ?, adresse_email = ? WHERE id_compte = ?;', [nom, prenom, date_de_naissance, numero_tel, adresse_email, req.params.id]);
+        pool.execute('UPDATE Compte SET nom = ?, prenom = ?, numero_tel = ?, adresse_email = ?, mot_de_passe = ? WHERE id_compte = ?;', [nom, prenom, numero_tel, adresse_email,cPassword, req.params.id]);
 
 
         
@@ -46,12 +47,14 @@ const updateUser = async (req, res) => {
         //recupere nom prenom date de naissance tel email
         const nom = req.body.nom || user[0].nom;
         const prenom = req.body.prenom || user[0].prenom;
-        const date_de_naissance = req.body.date_de_naissance || user[0].date_de_naissance;
         const numero_tel = req.body.numero_tel || user[0].numero_tel;
         const adresse_email = req.body.adresse_email || user[0].adresse_email;
+        const password = req.body.password || user[0].password;
+        const cPassword = await bcrypt.hash(password, 10);
+
 
         //mise a jour
-        pool.execute('UPDATE Compte SET nom = ?, prenom = ?, date_de_naissance = ?, numero_tel = ?, adresse_email = ? WHERE id_compte = ?;', [nom, prenom, date_de_naissance, numero_tel, adresse_email, req.user.id]);
+        pool.execute('UPDATE Compte SET nom = ?, prenom = ?, numero_tel = ?, adresse_email = ?, mot_de_passe = ? WHERE id_compte = ?;', [nom, prenom, numero_tel, adresse_email,cPassword, req.user.id]);
 
 
         

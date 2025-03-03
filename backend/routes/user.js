@@ -9,12 +9,12 @@ router.get('/all', userController.getAllUsers);
 
 router.get('/:id', userController.getUser);
 
-//needed data : nom, prenom, date_de_naissance, numero_tel, adresse_email
+//needed data : nom, prenom, numero_tel, adresse_email
 router.put('/:id/update',verifyRoles(roles_list.admin), userController.updateUsers);
 
 router.delete('/:id/delete',verifyRoles(roles_list.admin), userController.deleteUsers);
 
-//needed data : nom, prenom, date_de_naissance, numero_tel, adresse_email
+//needed data : nom, prenom, numero_tel, adresse_email
 router.put('/update', userController.updateUser);
 
 router.delete('/delete', userController.deleteUser);
