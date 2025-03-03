@@ -1,5 +1,6 @@
 const mysql = require('mysql2/promise');
 require('dotenv').config();
+const bcrypt = require('bcrypt');
 const fs = require('fs');
 const pool = mysql.createPool({
     host: process.env.HOST,
@@ -52,9 +53,6 @@ async function initializeDatabase() {
         //delete all tables
         // await pool.execute(data.deleteUserTables);
         // await pool.execute(data.deletePlantTable);
-        //add admin user
-        // const [result] = await pool.execute("INSERT INTO Compte (adresse_email, mot_de_passe, role, numero_tel, nom, prenom) VALUES ('admin', 'admin', 'admin', 'admin', 'admin', 'admin');");
-        // await pool.execute("INSERT INTO Compte_Admin (id_compte) VALUES (?);", [result.insertId]);
 
         // Exécuter les requêtes SQL
         await pool.execute(data.createCompteTable);
@@ -68,6 +66,11 @@ async function initializeDatabase() {
         await pool.execute(data.createPinPlantTable);
         await pool.execute(data.createValueTable);
 
+        //add admin user
+
+        // password = await bcrypt.hash("admin", 10);
+        // const [result] = await pool.execute(`INSERT INTO Compte (adresse_email, mot_de_passe, numero_tel, nom, prenom) VALUES ('admin', '${password}', 'admin', 'admin', 'admin');`);
+        // await pool.execute("INSERT INTO Compte_Admin (id_compte) VALUES (?);", [result.insertId]);
 
         // await displayTables(pool);//afficher la base de donner
         

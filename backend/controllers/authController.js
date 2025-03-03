@@ -26,6 +26,11 @@ const handleLogin = async (req, res) => {
     else if(client[0].length != 0) {
         role = "client";
     }
+    const user ={
+        id: foundUser.id_compte,
+        role: role
+    }
+    req.user = user;
     if (match) {
         // create JWTs
         const accessToken = jwt.sign(
@@ -44,7 +49,6 @@ const handleLogin = async (req, res) => {
             process.env.REFRESH_TOKEN_SECRET,
             { expiresIn: '30d' }
         );
-
         // Saving refreshToken with current user
         const [rows] = await pool.execute('SELECT * FROM refresh_tokens WHERE id_compte = ?', [foundUser.id_compte]);
         if (rows.length) {

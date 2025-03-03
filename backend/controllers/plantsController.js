@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const getAllPlants = async (req, res) => {
     try {
-        const [rows] = await pool.query('SELECT * FROM plant');
+        const [rows] = await pool.query('SELECT * FROM Plant');
         res.status(200).json(rows);
     } catch (error) {
         console.error(error);
@@ -14,7 +14,7 @@ const getAllPlants = async (req, res) => {
 const createPlant = async (req, res) => {
     try {
         const {name} = req.body;
-        const [rows] = await pool.query('INSERT INTO Plant (name) VALUES (?)', [name]);
+        const [rows] = await pool.query('INSERT INTO Plant (nom) VALUES (?)', [name]);
         res.status(201).json(rows);
     } catch (error) {
         console.error(error);
@@ -54,6 +54,13 @@ const getPlantInfo = async (req, res) => {
     }
 };
 
+/*************  ✨ Codeium Command ⭐  *************/
+/**
+ * Supprime une plante par son id
+ * @param {ObjectId} req.params.id - L'id de la plante
+ * @returns {Object} - Un objet contenant le resultat de la suppression
+ */
+/******  d3bad594-e200-4f33-869a-6221587421fb  *******/
 const deletePlant = async (req, res) => {
     try {
         const [rows] = await pool.query('DELETE FROM Plant WHERE id_plant = ?', [req.params.id]);

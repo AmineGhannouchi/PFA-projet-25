@@ -1,12 +1,39 @@
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
 const verifyRoles = (...allowedRoles) => {
     return (req, res, next) => {
-        if (!req?.user.role) return res.sendStatus(401); //Unauthorized 
-        const rolesArray = [...allowedRoles];
+        const cookies = req.cookies;
+        if (!cookies?.jwt) return res.sendStatus(401);
+        const refreshToken = cookies.jwt;
 
-        const result = rolesArray.includes(req.user.role) //if user can have more than 1 role ://req.user.role.map(role => rolesArray.includes(role)).find(val => val === true); //true if at least one of the roles is in the rolesArray
-        if (!result) return res.sendStatus(403); //Forbidden 
-        next(); //proceed to the next middleware or route handler
-    }
+        jwt.verify(
+            refreshToken,
+            process.env.REFRESH_TOKEN_SECRET,
+            (err, decoded) => {
+                if (err) return res.sendStatus(403); // Token invalide ou expiré
+
+                // Récupérer le rôle dans une variable
+                const userRole = decoded.role;
+
+                // Vérifier que le rôle existe
+                if (!userRole) return res.sendStatus(401); // Pas de rôle dans le token
+
+                // Stocker l'utilisateur dans req.user (optionnel, pour compatibilité)
+                req.user = {
+                    id: decoded.id_compte,
+                    role: userRole
+                };
+
+                // Vérifier si le rôle est autorisé
+                const rolesArray = [...allowedRoles];
+                const result = rolesArray.includes(userRole); // Vérifie si le rôle est dans les rôles autorisés
+
+                if (!result) return res.sendStatus(403); // Rôle non autorisé
+                next(); // Passe au middleware suivant
+            }
+        );
+    };
 }
 
 
