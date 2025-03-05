@@ -26,6 +26,8 @@ app.use(express.urlencoded({ extended: true })); // Pour parser les requêtes fo
 app.use(logger);
 app.use(errorHandler);
 app.use(cookieParser());
+//cross origin resource sharing
+app.use(cors(require('./config/corsConfig'))); //for api from externel websites
 
 //api
 app.use('/api/register', require('./routes/register'));
@@ -41,8 +43,7 @@ app.use('/api/user', require('./routes/user'));
 //test jwt with console.log
 app.use('/api/test', require('./routes/test'));
 
-//cross origin resource sharing
-app.use(cors(require('./config/corsConfig'))); //for api from externel websites
+
 
 //the routes
 app.use('/',require('./routes/mainRoute'));

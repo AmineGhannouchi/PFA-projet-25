@@ -1,7 +1,6 @@
 //list des url qui peuve utiliser le backend (api(GET,POST ....))
 const whiltelist = [
-    'sql url',
-    'frontend url',
+    'http://localhost:5173',
     'http://localhost:3500'
     ];
 const corsOptions = {
@@ -12,6 +11,8 @@ const corsOptions = {
             callback(new Error('Not allowed by CORS'));
         }
     },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Méthodes HTTP autorisées
+    credentials: true, // Si on utilise des cookies ou des tokens d'authentification
     optionsSuccessStatus: 200
 };
 
