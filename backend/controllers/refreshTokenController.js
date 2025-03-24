@@ -22,9 +22,9 @@ const handleRefreshToken = async (req, res) => {
                 { 
                     "id_compte": decoded.id_compte,
                     "role": decoded.role
-                 },
+                },
                 process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '1d' } //30s just for testiong purposes i put it 1d
+                { expiresIn: '1h' } //30s just for testiong purposes i put it 1d
             
             );
             res.json({ accessToken })

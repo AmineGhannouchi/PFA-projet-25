@@ -5,7 +5,7 @@ const whiltelist = [
     ];
 const corsOptions = {
     origin: (origin, callback) => {
-        if(whiltelist.indexOf(origin) !== -1 || !origin){// remove !origin from the list
+        if(whiltelist.includes('*') || whiltelist.indexOf(origin) !== -1 || !origin){// remove !origin from the list and the add *
             callback(null,true);
         }else{
             callback(new Error('Not allowed by CORS'));

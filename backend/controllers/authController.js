@@ -20,10 +20,10 @@ const handleLogin = async (req, res) => {
     const [client]=await pool.execute("SELECT * FROM Compte_Client WHERE id_compte = ?",[foundUser.id_compte]);
     const [Admin]=await pool.execute("SELECT * FROM Compte_Admin WHERE id_compte = ?",[foundUser.id_compte]);
     let role="";
-    if(Admin[0].length != 0) {
+    if(Admin[0] && Admin[0].length > 0) {
         role = "admin";
     }
-    else if(client[0].length != 0) {
+    else if(client[0] && client[0].length > 0) {
         role = "client";
     }
     const user ={
@@ -39,7 +39,7 @@ const handleLogin = async (req, res) => {
                 "role": role
             },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '30s' }
+            { expiresIn: '1h' }
         );
         const refreshToken = jwt.sign(
             { 
